@@ -1,0 +1,49 @@
+from tkinter import Tk, Label, Canvas
+import time as t
+from tkinter import font as tkFont
+
+dc = Tk()
+dc.geometry("500x200")
+dc.configure(bg="black")
+
+stylish_font = tkFont.Font(family="Times New Roman", size=30)
+
+canvas = Canvas(dc, width=500, height=200, bg="black", highlightthickness=0)
+canvas.pack()
+
+def create_rounded_rectangle(canvas, x1, y1, x2, y2, r=25, **kwargs):
+    points = [x1+r, y1,
+              x1+r, y1,
+              x2-r, y1,
+              x2-r, y1,
+              x2, y1,
+              x2, y1+r,
+              x2, y1+r,
+              x2, y2-r,
+              x2, y2-r,
+              x2, y2,
+              x2-r, y2,
+              x2-r, y2,
+              x1+r, y2,
+              x1+r, y2,
+              x1, y2,
+              x1, y2-r,
+              x1, y2-r,
+              x1, y1+r,
+              x1, y1+r,
+              x1, y1]
+    return canvas.create_polygon(points, **kwargs, smooth=True)
+
+create_rounded_rectangle(canvas, 50, 50, 450, 150, r=20, fill="black", outline="blue", width=2)
+
+l = Label(canvas, font=stylish_font, bg="black", fg="blue", text="")
+canvas.create_window(250, 100, window=l)
+
+def update_time():
+    current_time = t.strftime(" %H:%M:%S %p")
+    l.config(text=current_time)
+    dc.after(1000, update_time)
+
+update_time()
+
+dc.mainloop()
